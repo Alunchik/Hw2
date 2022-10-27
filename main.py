@@ -1,5 +1,6 @@
 import json
 import re
+import time
 
 from bs4 import BeautifulSoup
 import requests
@@ -22,8 +23,8 @@ class DependenciesInfo:
         URL = URL_template.format(package_name)
         page = requests.get(URL)
         if page.status_code != 200: #проверяем, установилось ли соединение
-            #  print("ERROR: " + str(page.status_code) + "page: " + package_name)
-            pass
+             print("ERROR: " + str(page.status_code) + "page: " + package_name)
+            # pass
         else:
             soup = BeautifulSoup(page.text, "html.parser")  # ищем скрипт в котором находятся все зависимости
             sc = soup.find('script')
@@ -55,6 +56,7 @@ class DependenciesInfo:
                     self.add_dependencies(dependence_list, package)  # добавляем в список для вывода наши зависимости
                     for depend in dependence_list:
                         new_package_list.append(depend) # кидаем в список пакетов
+                        time.sleep(0.5)
             package_list=new_package_list  # обновляем список пакетов для следующего уровня глубины
             cur_depth=cur_depth+1  # увеличиваем уровень глубины
 
